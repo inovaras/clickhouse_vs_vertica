@@ -1,0 +1,8 @@
+# Dockerfile.clickhouse - для установки curl и загрузки конфигурации
+FROM clickhouse/clickhouse-server:23
+
+# Установить curl
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+# Скачать config.xml
+RUN curl -o /etc/clickhouse-server/config.xml https://raw.githubusercontent.com/ClickHouse/ClickHouse/7ac5c421ad66ef6812d05f776b220a810d5e357e/programs/server/config.xml

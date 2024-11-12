@@ -1,0 +1,21 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Устанавливаем netcat-openbsd и curl
+RUN apt-get update && apt-get install -y netcat-openbsd curl && \
+    curl -o /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && \
+    chmod +x /usr/local/bin/wait-for-it.sh
+
+RUN chmod +x main.py
+
+# Ожидание доступности Vertica перед запуском
+# CMD ["wait-for-it.sh", "vertica:5444", "--", "python", "main.py"]
+# CMD ["wait-for-it.sh", "vertica:5444", "-t", "10", "--", "python", "main.py"]
+CMD ["python", "main.py"]

@@ -1,0 +1,79 @@
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: zookeeper:3.8
+    hostname: zookeeper
+    networks:
+      - ugc_network
+
+  clickhouse-node1:
+    build:
+      context: .
+      dockerfile: Dockerfile_clickhouse
+    container_name: clickhouse-node1
+    hostname: clickhouse-node1
+    volumes:
+      - ./clickhouse/node1:/etc/clickhouse-server
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    networks:
+      - ugc_network
+
+  clickhouse-node2:
+    build:
+      context: .
+      dockerfile: Dockerfile_clickhouse
+    container_name: clickhouse-node2
+    hostname: clickhouse-node2
+    volumes:
+      - ./clickhouse/node2:/etc/clickhouse-server
+    ports:
+      - "8124:8123"
+      - "9001:9000"
+    networks:
+      - ugc_network
+
+  clickhouse-node3:
+    build:
+      context: .
+      dockerfile: Dockerfile_clickhouse
+    container_name: clickhouse-node3
+    hostname: clickhouse-node3
+    ports:
+      - "8125:8123"
+      - "9002:9000"
+    volumes:
+      - ./clickhouse/node3:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+    networks:
+      - ugc_network
+
+  clickhouse-node4:
+    build:
+      context: .
+      dockerfile: Dockerfile_clickhouse
+    container_name: clickhouse-node4
+    hostname: clickhouse-node4
+    ports:
+      - "8126:8123"
+      - "9003:9000"
+    volumes:
+      - ./clickhouse/node4:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+    networks:
+      - ugc_network
+
+  vertica:
+    image: jbfavre/vertica:latest
+    container_name: vertica
+    ports:
+      - "5433:5433"
+    networks:
+      - ugc_network
+
+networks:
+  ugc_network:
+    driver: bridge

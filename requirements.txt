@@ -1,0 +1,7 @@
+clickhouse-driver==0.2.9
+clickhouse-connect==0.8.6
+vertica-python==1.4.0
+pydantic>=2.7.0
+asyncio==3.4.3
+pydantic-settings==2.6.1
+matplotlib==3.9.2
